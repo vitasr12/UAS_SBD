@@ -1,0 +1,22 @@
+MariaDB [(none)]> USE task_manager;
+Database changed
+MariaDB [task_manager]> CREATE VIEW 211402142 AS SELECT tpo.task_id as TaskID , tpl.task_name as NamaTask , tpl.task_status as Status, tc.id as KategoriId, tc.category_name as Kategori, ti.indikator_name as Indikator, tu.id as CreatorID, tu.name as CreatorName, tpl.task_priority as Prioritas FROM task_person as tpo, task_plans as tpl, task_categories as tc, task_indicators as ti, users as tu WHERE tu.name = 'User A'    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '211402142 AS SELECT tpo.task_id as TaskID , tpl.task_name as NamaTask , tpl.t...' at line 1
+MariaDB [task_manager]> SELECT
+    -> a.id, a.task_name, b.task_status, b.task_comments, d.category_name as 'Category',
+    -> DATEDIFF(a.task_duration_end, a.ask_duration_start) as 'Lama Pengerjaan',
+    -> c.name as 'Create By', (SELECT name from users where users.id = b.user_id ) as 'Verified By'
+    -> FROM task_plans a
+    -> RIGHT JOIN task_dailies b ON a.id = b.plan_id
+    -> INNER JOIN users c ON b.user_verify_id = c.id
+    -> RIGHT JOIN task_categories d ON a.category_id = d.id;
++--------------------------------------+--------------------------------+-------------+---------------+--------------+-----------------+-----------+-------------+
+| id                                   | task_name                      | task_status | task_comments | Category     | Lama Pengerjaan | Create By | Verified By |
++--------------------------------------+--------------------------------+-------------+---------------+--------------+-----------------+-----------+-------------+
+| NULL                                 | NULL                           | NULL        | NULL          | Analisis     |            NULL | NULL      | NULL        |
+| NULL                                 | NULL                           | NULL        | NULL          | Administrasi |            NULL | NULL      | NULL        |
+| c96fdbd6-a3a4-42e3-b437-444ffd734a36 | Menganalisa Data Kemahasiswaan | Process     | OKE           | Teknikal     |               7 | User A    | User B      |
++--------------------------------------+--------------------------------+-------------+---------------+--------------+-----------------+-----------+-------------+
+3 rows in set (0.001 sec)
+
+MariaDB [task_manager]> notee
